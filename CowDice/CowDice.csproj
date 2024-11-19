@@ -4,6 +4,17 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <Description>Dice</Description>
+    <PackageId>CowDice</PackageId>
+    <PackageVersion>0.1.0</PackageVersion>
+    <Authors>shadowCow</Authors>
+    <Copyright>Copyright (c) shadowCow 2024</Copyright>
+    <PackageProjectUrl>https://github.com/shadowCow/cow-dice-cs</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/shadowCow/cow-dice-cs</RepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>games hex grid</PackageTags>
+    <PackageReadmeFile>./README.md</PackageReadmeFile>
   </PropertyGroup>
 
 </Project>
