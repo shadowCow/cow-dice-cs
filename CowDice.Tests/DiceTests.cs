@@ -1,29 +1,85 @@
 namespace CowDice.Tests;
 
+using System.Linq;
+
 public class DiceTests
 {
     [Fact]
-    public void TestFixedDiceRoller()
+    public void TestMaxDiceRoller()
     {
-        var value = 1;
-        var roller = new FixedDiceRoller([value]);
+        var roller = new MaxDiceRoller();
+        var dice = new Die[]
+        {
+            new(1, 4),
+            new(1, 8),
+            new(1, 12),
+        };
 
-        AThousandFixedRollsAreCorrect(roller, value, value);
+        AThousandMaxRollsAreCorrect(roller, dice);
+    }
+
+    [Fact]
+    public void TestMaxDiceRollerMdN()
+    {
+        var roller = new MaxDiceRoller();
+
+        AThousandMdNRollsAreCorrect(roller, 1, 6, 6, 6);
     }
 
     [Fact]
     public void TestRandomDiceRoller()
     {
-        var roller = new RandomDiceRoller([new Die(1, 6), new Die(1, 6)]);
+        var roller = new MaxDiceRoller();
+        var dice = new Die[]
+        {
+            new(1, 4),
+            new(1, 8),
+            new(1, 12),
+        };
 
-        AThousandFixedRollsAreCorrect(roller, 1, 6);
+        AThousandRollsAreCorrect(roller, dice);
     }
 
-    static void AThousandFixedRollsAreCorrect(IDiceRoller roller, int expectedMin, int expectedMax)
+    [Fact]
+    public void TestRandomDiceRollerMdN()
+    {
+        var roller = new RandomDiceRoller();
+
+        AThousandMdNRollsAreCorrect(roller, 1, 6, 1, 6);
+    }
+
+    static void AThousandRollsAreCorrect(IDiceRoller roller, Die[] dice)
     {
         for (int i = 0; i < 1000; i++)
         {
-            var result = roller.Roll();
+            var result = roller.Roll(dice);
+
+            foreach (var (First, Second) in result.Zip(dice))
+            {
+                Assert.True(First >= Second.Min, $"Expected dice roll to be >= min dice value {Second.Min} but was {First}");
+                Assert.True(First <= Second.Max, $"Expected dice roll to be <= max dice value {Second.Max} but was {First}");
+            }
+        }
+    }
+
+    static void AThousandMaxRollsAreCorrect(IDiceRoller roller, Die[] dice)
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            var result = roller.Roll(dice);
+
+            foreach (var (First, Second) in result.Zip(dice))
+            {
+                Assert.Equal(First, Second.Max);
+            }
+        }
+    }
+
+    static void AThousandMdNRollsAreCorrect(IDiceRoller roller, int m, int n, int expectedMin, int expectedMax)
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            var result = roller.RollMdN(m, n);
 
             Assert.True(result.All(r => r >= expectedMin), $"Expected all dice rolled to be >= {expectedMin}, but was {result.Min()}");
             Assert.True(result.All(r => r <= expectedMax), $"Expected all dice rolled to be <= {expectedMax}, but was {result.Max()}");
