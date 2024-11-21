@@ -35,3 +35,16 @@ public class MaxDiceRoller : IDiceRoller
         return Enumerable.Range(1, numDice).Select(x => numPips);
     }
 }
+
+public class MinDiceRoller : IDiceRoller
+{
+    public IEnumerable<int> Roll(Die[] dice)
+    {
+        return dice.Select(d => d.Min);
+    }
+
+    public IEnumerable<int> RollMdN(int numDice, int numPips)
+    {
+        return Enumerable.Range(1, numDice).Select(x => 1);
+    }
+}

@@ -27,6 +27,27 @@ public class DiceTests
     }
 
     [Fact]
+    public void TestMinDiceRoller()
+    {
+        var roller = new MinDiceRoller();
+        var dice = new Die[]
+        {
+            new(1, 4),
+            new(2, 8),
+            new(3, 12),
+        };
+
+        AThousandMinRollsAreCorrect(roller, dice);
+    }
+
+    [Fact]
+    public void TestMinDiceRollerMdN()
+    {
+        var roller = new MinDiceRoller();
+        AThousandMdNRollsAreCorrect(roller, 1, 6, 1, 1);
+    }
+
+    [Fact]
     public void TestRandomDiceRoller()
     {
         var roller = new MaxDiceRoller();
@@ -71,6 +92,19 @@ public class DiceTests
             foreach (var (First, Second) in result.Zip(dice))
             {
                 Assert.Equal(First, Second.Max);
+            }
+        }
+    }
+
+    static void AThousandMinRollsAreCorrect(IDiceRoller roller, Die[] dice)
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            var result = roller.Roll(dice);
+
+            foreach (var (First, Second) in result.Zip(dice))
+            {
+                Assert.Equal(First, Second.Min);
             }
         }
     }
